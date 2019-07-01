@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Listing Sorting</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+
+<body>
+    <br />
+    <br />
+    <h1 style="text-align: center;">Demo Insert And Listing With Sorting</h1>
+    <div class="container">
+        <br />
+        <table class="table table-striped table-bordered table-sm" id="tableData">
+            <thead>
+                <tr>
+                    <th style="cursor: pointer;" onclick="sortData('first_name')">First
+                        Name<div class="pull-right"><i class="fa fa-fw fa-sort"></i></div>
+                    </th>
+                    <th style="cursor: pointer;" onclick="sortData('last_name')">Last
+                        Name<div class="pull-right"><i class="fa fa-fw fa-sort"></i></div>
+                    </th>
+                    <th style="cursor: pointer;" onclick="sortData('age')">Age
+                        <div class="pull-right"><i class="fa fa-fw fa-sort"></i></div>
+                    <th style="cursor: pointer;" onclick="sortData('standard')">Standard
+                        <div class="pull-right"><i class="fa fa-fw fa-sort"></i></div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <% Datas.forEach(function(data){ %>
+                <tr>
+                    <td>
+                        <%= data.firstName %>
+                    </td>
+                    <td>
+                        <%= data.lastName%>
+                    </td>
+                    <td>
+                        <%= data.age%>
+                    </td>
+                    <td>
+                        <%= data.standard%>
+                    </td>
+                </tr>
+                <% }) %>
+            </tbody>
+        </table>
+        <div class="d-inline" style="text-align: center"><a href="./add"><button class=" btn btn-primary">ADD
+                    DATA</button></a>
+            <a href="./"><button class="btn btn-primary">SHOW DATA</button></a>
+        </div>
+    </div>
+    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script>
+        var seq = 1;
+        var temp = '';
+        function sortData(field) {
+            if (temp === field) {
+                if (seq === 1) {
+                    seq = -1;
+                } else {
+                    seq = 1;
+                }
+                temp = field;
+            } else {
+                seq = 1;
+                temp = field;
+            }
+            $.ajax({
+                url: '<%= url%>',
+                type: "POST",
+                data: { "field": field, "seq": seq }
+            }).success(function (data) {
+                var result = $('<table/>').append(data).find('#tableData').html();
+                $('#tableData').html(result);
+            });
+        }
+    </script>
+
+</html>
